@@ -13,6 +13,26 @@ def test_pdf():
             text = reader.pages[2].extract_text()
             assert 'Python Testing with pytest' in text
 
+def test_csv():
+    with zipfile.ZipFile(os.path.join(RESOURCE, 'file.zip')) as zip_file:
+        with zip_file.open('Sample-Spreadsheet-100-rows.csv') as csv_file:
+            content = csv_file.read().decode(
+                'utf-8-sig')  # читаем содержимое файла
+            csvreader = list(csv.reader(content.splitlines()))
+            second_row = csvreader[1]  # получаем вторую строку
+
+            assert second_row[0] == '1.7 Cubic Foot Compact ""Cube"" Office Refrigerators",Barry French,293,457.81,208.16,68.02,Nunavut,Appliances,0.58'
+            assert second_row[1] == 'b'
+    pass
+
+def test_xls():
+    with zipfile.ZipFile(os.path.join(RESOURCE, 'file.zip')) as zip_file:
+        with zip_file.open('file_example_XLS_10.xls') as xlsx_file:
+            workbook = load_workbook(xlsx_file)
+            sheet = workbook.active
+
+            assert sheet.ceell(row=2, column=8).value == 'Etta'
+
 
 
 
