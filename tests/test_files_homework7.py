@@ -2,11 +2,11 @@ import os
 import csv
 import zipfile
 from pypdf import PdfReader
-from os_put import RESOURCE
+from path import RESOURCE, ZIP_FILE
 from openpyxl import load_workbook
 
 def test_pdf():
-    with zipfile.ZipFile(os.path.join(RESOURCE, 'file.zip')) as zip_file:
+    with zipfile.ZipFile(os.path.join(ZIP_FILE)) as zip_file:
         with zip_file.open('Python Testing with Pytest (Brian Okken).pdf') as pdf_file:
             reader = PdfReader(pdf_file)
             page = reader.pages[256]
@@ -14,10 +14,9 @@ def test_pdf():
             assert 'Python Testing with pytest' in text
 
 def test_csv():
-    with zipfile.ZipFile(os.path.join(RESOURCE, 'file.zip')) as zip_file:
+    with zipfile.ZipFile(os.path.join(ZIP_FILE)) as zip_file:
         with zip_file.open('Sample-Spreadsheet-100-rows.csv') as csv_file:
-            content = csv_file.read().decode(
-                'utf-8-sig')  # читаем содержимое файла
+            content = csv_file.read().decode('latin-1')  # читаем содержимое файла
             csvreader = list(csv.reader(content.splitlines()))
             second_row = csvreader[1]  # получаем вторую строку
 
@@ -25,13 +24,13 @@ def test_csv():
             assert second_row[1] == 'b'
     pass
 
-def test_xls():
-    with zipfile.ZipFile(os.path.join(RESOURCE, 'file.zip')) as zip_file:
-        with zip_file.open('file_example_XLS_10.xls') as xlsx_file:
+def test_xlsx():
+    with zipfile.ZipFile(os.path.join(ZIP_FILE)) as zip_file:
+        with zip_file.open('file_example_XLS_10.xlsx') as xlsx_file:
             workbook = load_workbook(xlsx_file)
             sheet = workbook.active
 
-            assert sheet.ceell(row=2, column=8).value == 'Etta'
+            assert sheet.ceell(row=2, column=8).value == 'Dulce'
 
 
 
