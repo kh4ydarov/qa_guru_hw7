@@ -16,4 +16,4 @@ def create_archive():
             zf.write(creating_file, os.path.basename(creating_file))
 
     yield  # Вызов pytest.fixture завершен
-    #shutil.rmtree(RESOURCE)  # Удаляем папку resource
+    shutil.rmtree(RESOURCE)  # Удаляем папку resource
